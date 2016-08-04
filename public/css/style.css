@@ -1,0 +1,13 @@
+.useslist, .chatwindow{
+	cursor: move;
+}
+
+.chatwindow .close{
+	cursor: pointer;
+}
+
+.messages{
+	height: 200px;
+	min-height: 200px;
+	overflow: auto;
+}

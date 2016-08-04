@@ -1,0 +1,17 @@
+{
+  "name": "gtalk",
+  "version": "1.0.0",
+  "description": "Gtalk like node application",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "keywords": [
+    "gtalk",
+    "hangout",
+    "nodejs",
+    "socket"
+  ],
+  "author": "Amit Patil (amit@amitpatil.me)",
+  "license": "ISC"
+}
