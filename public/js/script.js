@@ -19,15 +19,18 @@ $(document).ready(function(){
 
     // Close chat winow
    	$(document).on("click",".close",function(){
-   		$(this).closest(".chatwindow").remove()
+   		$(this).closest(".chatwindow").remove();
    	});
 });
 
+// Get random number relative to document width 
 randomx = function(){
 	console.log(Math.random());
 	console.log($(document).width());
 	return Math.floor(Math.random() * ($(document).width() - 300));
 }
+
+// Get random number relative to document height 
 randomy = function(){
-	return Math.floor(Math.random() * ($(document).height() - 300));
+	return Math.floor(Math.random() * ($(document).height() - ($(document).height()/2)));
 }

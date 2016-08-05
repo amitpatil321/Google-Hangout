@@ -13,5 +13,17 @@
     "socket"
   ],
   "author": "Amit Patil (amit@amitpatil.me)",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "chalk": "^1.1.3",
+    "express": "^4.14.0",
+    "express-handlebars": "^3.0.0",
+    "express-session": "^1.14.0",
+    "mongoose": "^4.5.8",
+    "socket.io": "^1.4.8"
+  },
+  "devDependencies": {
+    "reload": "^1.0.1"
+  }
 }
