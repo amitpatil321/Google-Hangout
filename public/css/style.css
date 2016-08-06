@@ -11,7 +11,7 @@ body{
 }
 .minibtn{
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     color: #888;
     margin-left:5px;
 }
@@ -22,7 +22,10 @@ body{
     font-size: 11px;
     display: none;
 }
-
+.header{
+    font-weight:600;
+    font-size:12px;
+}
 /*#chat-messages{
 	height: 200px;
 	min-height: 200px;
@@ -70,7 +73,7 @@ body{
       margin-left: -38px;
       border-radius: 50%;
       width: 30px;
-      margin-top: 12px;
+      margin-top: 5px;
 }
 #chat-messages div.message.right img{
     float: right;   
@@ -81,12 +84,12 @@ body{
     background:#f0f4f7;
     font-size:13px;
     font-weight:600;
-    padding:12px 13px;
+    padding: 8px 13px;
     border-radius:5px 5px 5px 0px;
     color:#8495a3;
     position:relative;
     float:left;
-    min-width: 60px;
+    min-width: 65px;
 }
 #chat-messages div.message.right .bubble{
     float:right;
@@ -106,7 +109,7 @@ div.message.right .corner{
     right:-5px;
 }
 .bubble span{
-      color: #aab8c2;
+      color: #888;
       font-size: 11px;
       position: absolute;
       right: 0;

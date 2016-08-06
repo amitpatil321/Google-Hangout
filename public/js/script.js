@@ -4,27 +4,35 @@ $(document).ready(function(){
 
     // Create new chat window
     $(document).on("click",".user",function(){
-    	var username = $(this).html();
-    	var userid   = $(this).attr("id");
-		var $div = $('<div />').appendTo('body');
-		$div.attr('class', 'ui card chatwindow comments');
-		$div.attr('id', userid);
-		$div.attr('style', 'position:absolute;left:'+randomx()+"px;top:"+randomy()+"px;");
-		$div.html('<div class="content drag uwheader"><div class="ui">'+username+'<i class="icon right floated remove"></i><i class="icon right floated chevron right"></i></div></div><div class="content messages" id="chat-messages"><div class="typing">Shrikant is typing...</div></div><div class="extra content"><div class="ui large transparent right icon ui fluid input"><i class="comment outline icon"></i><input class="txtmsg" id="'+userid+'" value="" placeholder="Message..." type="text"></div>');
+      var username = $(this).html();
+      var userid   = $(this).attr("id");
 
-    // <span class="ui right floated minibtn close">x</span><span class="ui right floated minibtn">-</span>
+      if(!$(document).find(".chatwindow [id='"+userid+"']").length){
+    		var $div = $('<div />').appendTo('body');
+    		$div.attr('class', 'ui card chatwindow comments');
+    		$div.attr('id', userid);
+    		$div.attr('style', 'position:absolute;left:'+randomx()+"px;top:"+randomy()+"px;");
+    		$div.html('<div class="content drag uwheader"><div class="header">'+username+'<i class="icon right floated minibtn disabled remove"></i><i class="icon right floated minibtn disabled chevron up"></i></div></div><div class="content messages" id="chat-messages"><div class="typing">Shrikant is typing...</div></div><div class="extra content"><div class="ui large transparent right icon ui fluid input"><i class="comment outline icon"></i><input class="txtmsg" id="'+userid+'" value="" placeholder="Message..." type="text"></div>');
+      }  
+      // <span class="ui right floated minibtn close">x</span><span class="ui right floated minibtn">-</span>
 
-		// attach draging
-		$div.draggable({
+		  // attach draging
+      $div.draggable({
           containment      : [window.width],
           refreshPositions : true,
           handle           : 'div.drag'
-    	});
+      });
     }); 
 
     // Close chat winow
-   	$(document).on("click",".close",function(){
-   		$(this).closest(".chatwindow").remove();
+    $(document).on("click",".remove",function(){
+      $(this).closest(".chatwindow").remove();
+    });     
+
+    // Close chat winow
+   	$(document).on("click",".up",function(){ 
+      $(this).closest(".chatwindow").find(".messages, .extra").fadeToggle();
+   		//$(this).closest(".extra").slideUp();
    	}); 
 
    	// Handle enter key press event on chat window input text element
@@ -43,12 +51,14 @@ $(document).ready(function(){
     // Send typing.... event
     $(document).on("keypress",".txtmsg",function(event) {
       // ignore special keys
-      if (event.which !== 0 && !event.ctrlKey && !event.metaKey && !event.altKey) {      
-        socket.emit("typing",{
-          sender   : myid,
-          receiver : $(this).attr("id")
-        });
-        console.log($(this).attr("id"));
+      if (event.which !== 0 && !event.ctrlKey && !event.metaKey && !event.altKey){
+       var keycode = (event.keyCode ? event.keyCode : event.which); 
+       if(keycode != 13){
+          socket.emit("typing",{
+            sender   : myid,
+            receiver : $(this).attr("id")
+          });
+        }
       }
     });
 });

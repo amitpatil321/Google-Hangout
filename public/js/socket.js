@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	// Set window title
-	document.title = myname;
+	document.title += " - "+myname;
 	// Send user online event to server
 	socket.emit("userOnline",{id:myid,name:myname});
 

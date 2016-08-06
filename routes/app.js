@@ -8,7 +8,7 @@ exports.home = function(req,res) {
     // check if user is logged in
     //req.session.destroy();
     if(!req.session.user){
-        res.redirect("/login"); 
+        res.redirect("/login");
     }else
         res.render("home.handlebars",{"user" : req.session.user,"page": "home"});
 }
@@ -20,7 +20,7 @@ exports.login = function(req,res){
 }
 // Show login screen
 exports.login2 = function(req,res){
-    console.log(req.params.username);
+    //console.log(req.params.username);
     res.render("login.handlebars",{"msg" : req.session.flash, "username": req.params.username, "password": req.params.password});
     delete req.session.flash
 }

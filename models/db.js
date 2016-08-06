@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var chalk    = require('chalk');
 
-
+// mongodb://amit:amit@ds145325.mlab.com:45325/hangout
 var dbURI = 'mongodb://127.0.0.1/hangout';
 console.log(chalk.yellow("Establishing connection to the DB"));
 

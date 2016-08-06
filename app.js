@@ -1,6 +1,5 @@
 // Development only libs
 var chalk      = require('chalk');
- 
 // Deployment libs
 var express    = require('express');
 var http       = require('http');
@@ -46,19 +45,36 @@ app.get('/home', appRoute.home)
 io.use(function (socket, next){
     var name = socket.handshake.query.name;
     socket._name = name;
-    next();
+    next(); 
 });
-
+ 
 var onlineusers = new Array();
 var users = new Array();
 io.on("connection",function(socket){
 	// User comes online 
 	socket.on("userOnline", function(user){
       socket.uid = user.id;
-      //console.log(socket.id);
-      users[socket.uid] = socket;
-      onlineusers.push(user)
-	  // Store user details in online users list
+      // check if user already exists ?
+      if(!user[socket.uid])
+        users[socket.uid] = socket;
+      
+      var found = 0;  
+      for (var key in onlineusers) {
+        console.log(onlineusers[key].id+"=="+user.id);
+        if(onlineusers[key].id == user.id)
+            found = 1 
+      }         
+
+      if(!found)
+        onlineusers.push(user)
+	  else
+        console.log("found"+found);
+
+      console.log(onlineusers)
+      console.log("=====")
+      console.log(user.id)
+
+      // Store user details in online users list
 	  io.emit("userOnline",{"users":onlineusers});
 	});  
 
@@ -139,4 +155,5 @@ io.on("connection",function(socket){
 var port = process.env.PORT || 3000;
 httpServer.listen(app.get('port'), function () {
   console.log('Web server listening on port ' + app.get('port'))
+  console.log('Web server started at : ' + new Date().toString("hh:mm tt"))
 });
