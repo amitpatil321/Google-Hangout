@@ -26,9 +26,17 @@ $(document).ready(function(){
 
 		// Check if i am a receiver and chat window is not open, then open window and append message
 		if(receiver == myid){
+			// Trigger click event and open senders windows as i am the receiver
+			// Check if window already open ? 
+			var chatwin = $(document).find(".chatwindow[id='"+sender+" .messages']");
+			console.log(chatwin.length);
+			if(!chatwin.length){
+				$(".onlineusers").find("a[id='"+sender+"']").click();
+			}
+			chatwin.append(msg);
+		}else{
+			// I am sender that means window already open, so just append the message to existing message list 
 			$(document).find(".chatwindow[id='"+receiver+"'] .messages").append(msg);
-		}
-		// Find that window by receiver id 
-		$(document).find(".chatwindow[id='"+receiver+"'] .messages").append(msg);
+		}	
 	});	
 })
