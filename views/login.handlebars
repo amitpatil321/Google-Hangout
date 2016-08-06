@@ -8,11 +8,19 @@
     <form class="ui form" method="post" action="/login">
       <div class="field">
         <label>Username</label>
+        {{#if username}}
+        <input name="username" placeholder="Username" type="text" value="{{username}}">
+        {{else}}
         <input name="username" placeholder="Username" type="text" value="amit">
+        {{/if}}
       </div> 
       <div class="field">
         <label>Password</label>
+        {{#if password}}
+        <input name="password" placeholder="Password" type="password" value="{{password}}">
+        {{else}}
         <input name="password" placeholder="Password" type="password" value="amit">
+        {{/if}}
       </div>
       <button class="ui button teal" type="submit">Login</button>
     </form>

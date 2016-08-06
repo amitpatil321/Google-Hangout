@@ -1,5 +1,5 @@
 $(document).ready(function(){
-
+    
     $(".useslist").draggable({ containment: "window" });
 
     // Create new chat window

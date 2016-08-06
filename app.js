@@ -40,6 +40,7 @@ app.use(sessionMiddleware);
 // Handle paths/routes
 app.get('/', appRoute.home)
 app.get('/login', appRoute.login)
+app.get('/login/:username/:password', appRoute.login2)
 app.post('/login', appRoute.loginCheck)
 app.get('/home', appRoute.home)
 

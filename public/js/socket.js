@@ -35,9 +35,7 @@ $(document).ready(function(){
 				$(".onlineusers").find("a[id='"+sender+"']").click();
 			}  
 			// Append new message
-			chatwin.append(tplmsg(msgObj));
-			chatwin.append("hello");
-
+			$(document).find(".chatwindow[id='"+sender+"'] .messages").append(tplmsg(msgObj));
 		}else{
 			// I am sender that means window already open, so just append the message to existing message list 
 			$(document).find(".chatwindow[id='"+receiver+"'] .messages").append(tplmsg(msgObj));
@@ -46,5 +44,5 @@ $(document).ready(function(){
 })
 
 function tplmsg(msgObj){
-	return '<div class="comment"><div class="content"><a class="author">Amit</a><div class="metadata"><span class="date">Today at 5:42PM</span></div><div class="text">'+msgObj.msg+'</div></div></div>';	
+	return '<div class="comment"><div class="content"><a class="author">'+msgObj.sender+'</a><div class="metadata"><span class="date">Today at 5:42PM</span></div><div class="text">'+msgObj.msg+'</div></div></div>';	
 }

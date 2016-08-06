@@ -18,6 +18,12 @@ exports.login = function(req,res){
     res.render("login.handlebars",{"msg" : req.session.flash});
     delete req.session.flash
 }
+// Show login screen
+exports.login2 = function(req,res){
+    console.log(req.params.username);
+    res.render("login.handlebars",{"msg" : req.session.flash, "username": req.params.username, "password": req.params.password});
+    delete req.session.flash
+}
 
 // check user login details
 exports.loginCheck = function(req,res){
