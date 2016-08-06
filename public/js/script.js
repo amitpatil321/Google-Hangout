@@ -1,14 +1,16 @@
 $(document).ready(function(){
+
     $(".useslist").draggable({ containment: "window" });
 
     // Create new chat window
-    $(".user").click(function(){
-    	var username = $(this).attr("id");
+    $(document).on("click",".user",function(){
+    	var username = $(this).html();
+    	var userid   = $(this).attr("id");
 		var $div = $('<div />').appendTo('body');
 		$div.attr('class', 'ui card chatwindow');
-		$div.attr('user-id', username);
+		$div.attr('id', userid);
 		$div.attr('style', 'position:absolute;left:'+randomx()+"px;top:"+randomy()+"px;");
-		$div.html('<div class="content"><div class="header teal ui">'+username+'<span class="ui right floated close">x</span></div></div><div class="content messages">sss</div><div class="extra content"><div class="ui large transparent left icon input"><i class="comment outline icon"></i><input placeholder="Message..." type="text"></div>');
+		$div.html('<div class="content"><div class="header teal ui">'+username+'<span class="ui right floated close">x</span></div></div><div class="content messages"></div><div class="extra content"><div class="ui large transparent left icon input"><i class="comment outline icon"></i><input class="txtmsg" id="'+userid+'" value="" placeholder="Message..." type="text"></div>');
 
 		// attach draging
 		$div.draggable({
@@ -21,12 +23,21 @@ $(document).ready(function(){
    	$(document).on("click",".close",function(){
    		$(this).closest(".chatwindow").remove();
    	});
+
+   	// Handle enter key press event on chat window input text element
+   	$(document).on("keydown",".txtmsg",function(event){
+   		if(event.keyCode == 13){
+   			var receiver = $(this).attr("id");
+   			var msg  	 = $(this).val();
+   			socket.emit("message",{sender: myid, receiver: receiver, msg: msg});
+   			// Clear text box
+   			$(this).val('');
+   		}
+   	})
 });
 
 // Get random number relative to document width 
 randomx = function(){
-	console.log(Math.random());
-	console.log($(document).width());
 	return Math.floor(Math.random() * ($(document).width() - 300));
 }
 

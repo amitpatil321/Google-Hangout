@@ -1,13 +1,16 @@
 var mongoose = require( 'mongoose' );
-var users = mongoose.model('Users');
+var users    = mongoose.model('Users');
+var crypto   = require('crypto');
+var socket   = require('socket.io');
 
-exports.home = function(req,res){
-	if(!req.session.user){
-		res.render("login.handlebars");
-		console.log("not logged in");
-	}else{
-		console.log("Logged in 	");
-	}
+// Show home page
+exports.home = function(req,res) {
+    // check if user is logged in
+    //req.session.destroy();
+    if(!req.session.user){
+        res.redirect("/login");
+    }else
+        res.render("home.handlebars",{"user" : req.session.user,"page": "home"});
 }
 
 // Show login screen
@@ -21,13 +24,21 @@ exports.loginCheck = function(req,res){
     var username = req.body.username;
     var password = req.body.password;    
     users.find({username: username}, function(er, user){
-        console.log(user);
+        //console.log(user);
         if(!user.length){
             req.session.flash = {"type" : "error", "msg" : "Invalid username or password"} 
             res.redirect("/login");
         }
         else{
             if(user[0].password == password){
+                var id   = user[0]._id
+                var name = user[0].name
+
+                // Store user details in online users list
+                // onlineusers.push({"id": id, "name" : name})
+
+                // Store user details in session
+                req.session.user = {"id": id,"secret": crypto.randomBytes(20).toString('hex'),"name" : name}
                 res.redirect("/home");
             }else{
                 req.session.flash = {"type" : "error", "msg" : "Invalid username or password"} 
@@ -37,7 +48,3 @@ exports.loginCheck = function(req,res){
     });
 }
 
-// Show home page
-exports.home = function(req,res) {
-    res.render("home.handlebars");
-}
