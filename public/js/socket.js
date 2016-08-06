@@ -16,7 +16,7 @@ $(document).ready(function(){
 		// Upate online users list
 		$(".onlineusers").html(list);
 	});
-
+ 
 	// Get new message
 	socket.on("message",function(msgObj){
 		var sender    =  msgObj.sender;
@@ -25,18 +25,26 @@ $(document).ready(function(){
 		var msg 	  =  msgObj.msg;
 
 		// Check if i am a receiver and chat window is not open, then open window and append message
-		if(receiver == myid){
+		if(receiver == myid){ 
+			console.log("inside");
 			// Trigger click event and open senders windows as i am the receiver
 			// Check if window already open ? 
-			var chatwin = $(document).find(".chatwindow[id='"+sender+" .messages']");
-			console.log(chatwin.length);
-			if(!chatwin.length){
+			var chatwin = $(document).find(".chatwindow[id='"+sender+"'] .messages");
+			if(chatwin.length <= 0) {
+				// Trigget click event on senders name to open window
 				$(".onlineusers").find("a[id='"+sender+"']").click();
-			}
-			chatwin.append(msg);
+			}  
+			// Append new message
+			chatwin.append(tplmsg(msgObj));
+			chatwin.append("hello");
+
 		}else{
 			// I am sender that means window already open, so just append the message to existing message list 
-			$(document).find(".chatwindow[id='"+receiver+"'] .messages").append(msg);
+			$(document).find(".chatwindow[id='"+receiver+"'] .messages").append(tplmsg(msgObj));
 		}	
 	});	
 })
+
+function tplmsg(msgObj){
+	return '<div class="comment"><div class="content"><a class="author">Amit</a><div class="metadata"><span class="date">Today at 5:42PM</span></div><div class="text">'+msgObj.msg+'</div></div></div>';	
+}

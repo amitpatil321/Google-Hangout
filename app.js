@@ -55,7 +55,7 @@ io.on("connection",function(socket){
 	// USer comes online 
 	socket.on("userOnline", function(user){
       socket.uid = user.id;
-      console.log(socket.id);
+      //console.log(socket.id);
       users[socket.uid] = socket;
       onlineusers.push(user)
 	  // Store user details in online users list
@@ -63,16 +63,16 @@ io.on("connection",function(socket){
 	}); 
 
 	socket.on("message", function(msgObj){
-		console.log("=="+msgObj);
+		//console.log("=="+msgObj);
 		// Get servers secret key
 		var senderSecret = socket.request.session.user.secret;
 		// Get receivers id
 		var receiverId   = msgObj.receiver;
 		// Create room name
-		var room = msgObj.sender+"-"+receiverId;
+		var room = senderSecret+"-"+receiverId;
      	users[msgObj.receiver].join(room);  
     	users[msgObj.sender].join(room);
-    	console.log(room);
+    	//console.log(room);
     	// send message to all user in room
     	io.sockets.in(room).emit("message",{
     		"msg"      : msgObj.msg, 

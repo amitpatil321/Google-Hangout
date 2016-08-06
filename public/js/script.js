@@ -7,7 +7,7 @@ $(document).ready(function(){
     	var username = $(this).html();
     	var userid   = $(this).attr("id");
 		var $div = $('<div />').appendTo('body');
-		$div.attr('class', 'ui card chatwindow');
+		$div.attr('class', 'ui card chatwindow comments');
 		$div.attr('id', userid);
 		$div.attr('style', 'position:absolute;left:'+randomx()+"px;top:"+randomy()+"px;");
 		$div.html('<div class="content"><div class="header teal ui">'+username+'<span class="ui right floated close">x</span></div></div><div class="content messages"></div><div class="extra content"><div class="ui large transparent left icon input"><i class="comment outline icon"></i><input class="txtmsg" id="'+userid+'" value="" placeholder="Message..." type="text"></div>');
@@ -17,7 +17,7 @@ $(document).ready(function(){
 	        containment: [window.width],
 	        refreshPositions: true
     	});
-    });
+    }); 
 
     // Close chat winow
    	$(document).on("click",".close",function(){
