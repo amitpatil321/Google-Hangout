@@ -10,7 +10,9 @@ $(document).ready(function(){
 		$div.attr('class', 'ui card chatwindow comments');
 		$div.attr('id', userid);
 		$div.attr('style', 'position:absolute;left:'+randomx()+"px;top:"+randomy()+"px;");
-		$div.html('<div class="content drag uwheader"><div class="header teal ui">'+username+'<span class="ui right floated close">x</span></div></div><div class="content messages" id="chat-messages"></div><div class="extra content"><div class="ui large transparent right icon ui fluid input"><i class="comment outline icon"></i><input class="txtmsg" id="'+userid+'" value="" placeholder="Message..." type="text"></div>');
+		$div.html('<div class="content drag uwheader"><div class="ui">'+username+'<i class="icon right floated remove"></i><i class="icon right floated chevron right"></i></div></div><div class="content messages" id="chat-messages"><div class="typing">Shrikant is typing...</div></div><div class="extra content"><div class="ui large transparent right icon ui fluid input"><i class="comment outline icon"></i><input class="txtmsg" id="'+userid+'" value="" placeholder="Message..." type="text"></div>');
+
+    // <span class="ui right floated minibtn close">x</span><span class="ui right floated minibtn">-</span>
 
 		// attach draging
 		$div.draggable({
@@ -40,10 +42,14 @@ $(document).ready(function(){
 
     // Send typing.... event
     $(document).on("keypress",".txtmsg",function(event) {
-      socket.emit("typing",{
-        sender   : myid,
-        receiver : $(this).attr("id")
-      });
+      // ignore special keys
+      if (event.which !== 0 && !event.ctrlKey && !event.metaKey && !event.altKey) {      
+        socket.emit("typing",{
+          sender   : myid,
+          receiver : $(this).attr("id")
+        });
+        console.log($(this).attr("id"));
+      }
     });
 });
 

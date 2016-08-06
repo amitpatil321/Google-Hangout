@@ -36,7 +36,6 @@ app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:false}));
 app.use(sessionMiddleware);
 
-
 // Handle paths/routes
 app.get('/', appRoute.home)
 app.get('/login', appRoute.login)
@@ -92,7 +91,7 @@ io.on("connection",function(socket){
         //     if(onlineusers[key].name == receiver);
         //         receiverName = onlineusers[key].name
         // }      
-
+  
     	// send message to all user in room
     	io.sockets.in(room).emit("message",{
             "msg"          : msgObj.msg, 
@@ -123,6 +122,7 @@ io.on("connection",function(socket){
         // Create room name
         var room = senderSecret+"-"+receiverId;
         io.sockets.in(room).emit("typing",{
+            "sender"   : msgObj.sender,
             "receiver" : msgObj.receiver,
             "msg"      : senderName+' is typing...', 
         });

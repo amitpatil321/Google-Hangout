@@ -9,10 +9,18 @@ body{
 .uwheader{
     background: #293239 none repeat scroll 0 0;    
 }
-.chatwindow .close{
+.minibtn{
     cursor: pointer;
-    font-size: 12px;
+    font-size: 16px;
     color: #888;
+    margin-left:5px;
+}
+.typing{
+    position:absolute;
+    bottom:50;    
+    color: #888;
+    font-size: 11px;
+    display: none;
 }
 
 /*#chat-messages{
@@ -78,6 +86,7 @@ body{
     color:#8495a3;
     position:relative;
     float:left;
+    min-width: 60px;
 }
 #chat-messages div.message.right .bubble{
     float:right;

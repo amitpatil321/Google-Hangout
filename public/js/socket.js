@@ -1,5 +1,6 @@
 $(document).ready(function(){
-
+	// Set window title
+	document.title = myname;
 	// Send user online event to server
 	socket.emit("userOnline",{id:myid,name:myname});
 
@@ -26,7 +27,6 @@ $(document).ready(function(){
 
 		// Check if i am a receiver and chat window is not open, then open window and append message
 		if(receiver == myid){ 
-			console.log("inside");
 			// Trigger click event and open senders windows as i am the receiver
 			// Check if window already open ? 
 			var chatwin = $(document).find(".chatwindow[id='"+sender+"'] .messages");
@@ -45,7 +45,9 @@ $(document).ready(function(){
 
 	// Get 'user is typing..' message
 	socket.on("typing", function(dataObj){
-		$(document).find(".chatwindow[id='"+dataObj.receiver+"'] .messages").append(dataObj.msg);
+		var chatwin = $(document).find(".chatwindow[id='"+dataObj.sender+"'] .messages");
+		chatwin.find(".typing").html(dataObj.msg).fadeIn();
+		setTimeout(function(){ chatwin.find(".typing").hide(); }, 1000);
 	});
 })
 
@@ -54,7 +56,7 @@ function tplmsg(msgObj,msgsender){
 	var msgalign = "left";
 	if(msgObj.sender == myid) msgalign = "right";
 
-	return '<div class="message '+msgalign+'"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/1_copy.jpg"><div class="bubble">'+msgObj.msg+'<div class="corner"></div><span>3 min</span></div></div>';
+	return '<div class="message '+msgalign+'"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/1_copy.jpg"><div class="bubble">'+msgObj.msg+'<div class="corner"></div><span>'+moment(msgObj.timestamp).format("h:mm:ss A")+'</span></div></div>';
 }
 
 function scroll(){
