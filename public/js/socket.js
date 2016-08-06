@@ -38,11 +38,25 @@ $(document).ready(function(){
 			$(document).find(".chatwindow[id='"+sender+"'] .messages").append(tplmsg(msgObj,msgObj.sendername));
 		}else{
 			// I am sender that means window already open, so just append the message to existing message list 
-			$(document).find(".chatwindow[id='"+receiver+"'] .messages").append(tplmsg(msgObj,"Me"));
-		}	
-	});	
+			$(document).find(".chatwindow[id='"+receiver+"'] .messages").append(tplmsg(msgObj,"self"));
+		}
+		scroll();
+	});
+
+	// Get 'user is typing..' message
+	socket.on("typing", function(dataObj){
+		$(document).find(".chatwindow[id='"+dataObj.receiver+"'] .messages").append(dataObj.msg);
+	});
 })
 
-function tplmsg(msgObj){
-	return '<div class="comment"><div class="content"><a class="author">'+msgObj.sendername+'</a><div class="metadata"><span class="date">Today at 5:42PM</span></div><div class="text">'+msgObj.msg+'</div></div></div>';	
+function tplmsg(msgObj,msgsender){
+	//return '<div class="comment"><div class="content"><a class="author">'+msgObj.sendername+'</a><div class="metadata"><span class="date">Today at 5:42PM</span></div><div class="text">'+msgObj.msg+'</div></div></div>';
+	var msgalign = "left";
+	if(msgObj.sender == myid) msgalign = "right";
+
+	return '<div class="message '+msgalign+'"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/1_copy.jpg"><div class="bubble">'+msgObj.msg+'<div class="corner"></div><span>3 min</span></div></div>';
+}
+
+function scroll(){
+	$("#chat-messages").scrollTop(1000);
 }

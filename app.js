@@ -61,15 +61,17 @@ io.on("connection",function(socket){
       onlineusers.push(user)
 	  // Store user details in online users list
 	  io.emit("userOnline",{"users":onlineusers});
-	}); 
+	});  
 
+
+    // New message event
 	socket.on("message", function(msgObj){
 		//console.log("=="+msgObj);
 		// Get servers secret key
 		var senderSecret = socket.request.session.user.secret;
 		// Get receivers id
 		var receiverId   = msgObj.receiver;
-
+ 
         var sender       = msgObj.sender 
         var receiver     = msgObj.receiver
         var senderName   = '';
@@ -104,6 +106,27 @@ io.on("connection",function(socket){
 		//     console.log(room[key]);
 		// }
 	});
+
+    socket.on("typing", function(msgObj){
+        var senderSecret = socket.request.session.user.secret;
+        // Get receivers id
+        var receiverId   = msgObj.receiver;
+        var senderName   = '';
+
+        var room = senderSecret+"-"+receiverId;
+
+        // Find sender name 
+        for (var key in onlineusers) {
+            if(onlineusers[key].name == msgObj.sender);
+                senderName = onlineusers[key].name
+        }   
+        // Create room name
+        var room = senderSecret+"-"+receiverId;
+        io.sockets.in(room).emit("typing",{
+            "receiver" : msgObj.receiver,
+            "msg"      : senderName+' is typing...', 
+        });
+    });
 
 	// User disconencts
 	socket.on('disconnect', function () {

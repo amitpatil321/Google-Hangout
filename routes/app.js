@@ -8,7 +8,7 @@ exports.home = function(req,res) {
     // check if user is logged in
     //req.session.destroy();
     if(!req.session.user){
-        res.redirect("/login");
+        res.redirect("/login"); 
     }else
         res.render("home.handlebars",{"user" : req.session.user,"page": "home"});
 }
