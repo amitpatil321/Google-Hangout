@@ -53,7 +53,7 @@ io.use(function (socket, next){
 var onlineusers = new Array();
 var users = new Array();
 io.on("connection",function(socket){
-	// USer comes online 
+	// User comes online 
 	socket.on("userOnline", function(user){
       socket.uid = user.id;
       //console.log(socket.id);
@@ -69,17 +69,34 @@ io.on("connection",function(socket){
 		var senderSecret = socket.request.session.user.secret;
 		// Get receivers id
 		var receiverId   = msgObj.receiver;
-		// Create room name
+
+        var sender       = msgObj.sender 
+        var receiver     = msgObj.receiver
+        var senderName   = '';
+        var receiverName = '';
+
+        // Create room name
 		var room = senderSecret+"-"+receiverId;
      	users[msgObj.receiver].join(room);  
     	users[msgObj.sender].join(room);
-    	//console.log(room);
+
+        // // Find sender name 
+        // for (var key in onlineusers) {
+        //     if(onlineusers[key].id == sender)
+        //         senderName = onlineusers[key].name
+        // }      
+        // // Find receiver name 
+        // for (var key in onlineusers) {
+        //     if(onlineusers[key].name == receiver);
+        //         receiverName = onlineusers[key].name
+        // }      
+
     	// send message to all user in room
     	io.sockets.in(room).emit("message",{
-    		"msg"      : msgObj.msg, 
-    		"sender"   : msgObj.sender, 
-    		"receiver" : msgObj.receiver,
-    		"timestamp": Date.now()
+            "msg"          : msgObj.msg, 
+            "sender"       : msgObj.sender, 
+            "receiver"     : msgObj.receiver,
+            "timestamp"    : Date.now() 
     	});
 		// List all rooms and members	
 		// var room = io.sockets.adapter.rooms;

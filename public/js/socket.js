@@ -35,14 +35,14 @@ $(document).ready(function(){
 				$(".onlineusers").find("a[id='"+sender+"']").click();
 			}  
 			// Append new message
-			$(document).find(".chatwindow[id='"+sender+"'] .messages").append(tplmsg(msgObj));
+			$(document).find(".chatwindow[id='"+sender+"'] .messages").append(tplmsg(msgObj,msgObj.sendername));
 		}else{
 			// I am sender that means window already open, so just append the message to existing message list 
-			$(document).find(".chatwindow[id='"+receiver+"'] .messages").append(tplmsg(msgObj));
+			$(document).find(".chatwindow[id='"+receiver+"'] .messages").append(tplmsg(msgObj,"Me"));
 		}	
 	});	
 })
 
 function tplmsg(msgObj){
-	return '<div class="comment"><div class="content"><a class="author">'+msgObj.sender+'</a><div class="metadata"><span class="date">Today at 5:42PM</span></div><div class="text">'+msgObj.msg+'</div></div></div>';	
+	return '<div class="comment"><div class="content"><a class="author">'+msgObj.sendername+'</a><div class="metadata"><span class="date">Today at 5:42PM</span></div><div class="text">'+msgObj.msg+'</div></div></div>';	
 }
