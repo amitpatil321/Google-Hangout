@@ -1,16 +1,16 @@
 // Development only libs
 var chalk      = require('chalk');
 // Deployment libs
-var express    = require('express');
-var http       = require('http');
-var socket     = require('socket.io');
-var bodyparser = require('body-parser');
-var handlebars = require('express-handlebars');
-var session    = require('express-session');
-var crypto 	   = require('crypto');
-var db         = require('./models/db.js');
-var helper     = require('./models/helper.js');
-var appRoute   = require('./routes/app.js');
+var express     = require('express');
+var http        = require('http');
+var socket      = require('socket.io');
+var bodyparser  = require('body-parser');
+var handlebars  = require('express-handlebars');
+var session     = require('express-session');
+var crypto 	    = require('crypto');
+var db          = require('./models/db.js');
+var userModel   = require('./models/user.js');
+var appRoute    = require('./routes/app.js');
 // var userRoute  = require('./routes/user.js');
 // var chatRoute  = require('./routes/chat.js');
  
@@ -48,7 +48,7 @@ io.use(function (socket, next){
     socket._name = name;
     next(); 
 });
- 
+  
 var onlineusers = new Array();
 var users = new Array();
 io.on("connection",function(socket){
@@ -62,7 +62,7 @@ io.on("connection",function(socket){
       // check if user already exists in online users list ?
       var found = 0;  
       for (var key in onlineusers) {
-        console.log(onlineusers[key].id+"=="+user.id);
+        //console.log(onlineusers[key].id+"=="+user.id);
         if(onlineusers[key].id == user.id)
             found = 1 
       }         
@@ -72,6 +72,7 @@ io.on("connection",function(socket){
 
       // Store user details in online users list
 	  io.emit("userOnline",{"users":onlineusers});
+
 	});  
 
 
@@ -79,7 +80,9 @@ io.on("connection",function(socket){
 	socket.on("message", function(msgObj){
 		//console.log("=="+msgObj);
 		// Get servers secret key
-		var senderSecret = socket.request.session.user.secret;
+        //var senderSecret = socket.request.session.user.secret;
+        var senderSecret   = userModel.getSecret(msgObj.sender);
+		var receiverSecret = userModel.getSecret(msgObj.receiver);
 		// Get receivers id
 		var receiverId   = msgObj.receiver;
  
@@ -138,13 +141,12 @@ io.on("connection",function(socket){
             "receiver" : msgObj.receiver,
             "msg"      : senderName+' is typing...', 
         });
-        console.log(chalk.red("Typing event received from :"+msgObj.sender+" to :"+msgObj.receiver));
-        helper.getUsername("amit");
+        //console.log(chalk.red("Typing event received from :"+msgObj.sender+" to :"+msgObj.receiver));
         
-        var room = io.sockets.adapter.rooms;
-        for (var key in room){
-            console.log(room[key]);
-        }        
+        // var room = io.sockets.adapter.rooms;
+        // for (var key in room){
+        //     console.log(room[key]);
+        // }        
     });
 
 	// User disconencts

@@ -1,7 +1,7 @@
-var mongoose = require( 'mongoose' );
-var users    = mongoose.model('Users');
-var crypto   = require('crypto');
-var socket   = require('socket.io');
+var mongoose    = require( 'mongoose' );
+var users       = mongoose.model('Users');
+var crypto      = require('crypto');
+var helperModel = require('../models/helper.js');
 
 // Show home page
 exports.home = function(req,res) {
@@ -44,7 +44,12 @@ exports.loginCheck = function(req,res){
                 // onlineusers.push({"id": id, "name" : name})
 
                 // Store user details in session
-                req.session.user = {"id": id,"secret": crypto.randomBytes(20).toString('hex'),"name" : name}
+                var secretkey = crypto.randomBytes(20).toString('hex');
+                req.session.user = {"id": id,"secret": secretkey,"name" : name}
+
+                // Save user id and secret key in a database  
+                helperModel.insertKey(id, secretkey, secretkey);  
+
                 res.redirect("/home");
             }else{
                 req.session.flash = {"type" : "error", "msg" : "Invalid username or password"} 

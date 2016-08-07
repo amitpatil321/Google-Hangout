@@ -17,12 +17,22 @@ mongoose.connection.on("connected",function(){
     console.log(chalk.green("Database connection successful"));
 });
 
-/*** uSers schema ***/
+/*** users schema ***/
 var userSchema = new mongoose.Schema({
     name     : {type:String},
     username : {type : String, unique : true},
     password : {type : String}
 });
 
-mongoose.model( 'Users', userSchema );
+//mongoose.model( 'Users', userSchema );
+global.Users = mongoose.model('Users',userSchema);
 
+/*** users schema ***/
+var skeysSchema = new mongoose.Schema({
+    uid       : {type:String},
+    secretkey : {type:String},
+    otherkey  : {type:String}
+});
+
+//mongoose.model( 'Keys', skeysSchema );
+global.Keys = mongoose.model('Keys',skeysSchema);
