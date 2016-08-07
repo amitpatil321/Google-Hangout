@@ -30,8 +30,15 @@ $(document).ready(function(){
     });     
 
     // Close chat winow
-   	$(document).on("click",".up",function(){ 
-      $(this).closest(".chatwindow").find(".messages, .extra").fadeToggle();
+   	$(document).on("click",".up,.down",function(){ 
+      var self = $(this);
+      if($(this).hasClass('chevron up'))
+        $(this).removeClass("chevron up").addClass('chevron down'); 
+      else
+        $(this).removeClass("chevron down").addClass('chevron up'); 
+      self.closest(".chatwindow").find(".messages").slideToggle("fast",function(){
+        self.closest('.chatwindow').find(".extra").slideToggle('fast');
+      });
    		//$(this).closest(".extra").slideUp();
    	}); 
 

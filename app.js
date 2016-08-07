@@ -78,24 +78,22 @@ io.on("connection",function(socket){
 
     // New message event
 	socket.on("message", function(msgObj){
-		//console.log("=="+msgObj);
-		// Get servers secret key
-        //var senderSecret = socket.request.session.user.secret;
+        // Get users secret keys
         var senderSecret   = userModel.getSecret(msgObj.sender);
 		var receiverSecret = userModel.getSecret(msgObj.receiver);
-		// Get receivers id
-		var receiverId   = msgObj.receiver;
  
-        var sender       = msgObj.sender 
-        var receiver     = msgObj.receiver
-        var senderName   = '';
-        var receiverName = '';
+        var sender   = msgObj.sender 
+        var receiver = msgObj.receiver
 
         // Create room name
-		var room = senderSecret+"-"+receiverId;
-     	users[msgObj.receiver].join(room);  
-    	users[msgObj.sender].join(room);
+        var room = senderSecret+"-"+receiverSecret;
 
+        // check if users are in room already ? 
+        // If not then create new otherwise use same room
+        if(!io.sockets.adapter.rooms[room]){
+         	users[msgObj.receiver].join(room);  
+        	users[msgObj.sender].join(room);
+        }    
         // // Find sender name 
         // for (var key in onlineusers) {
         //     if(onlineusers[key].id == sender)
