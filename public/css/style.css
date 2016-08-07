@@ -11,7 +11,7 @@ body{
 }
 .minibtn{
     cursor: pointer;
-    font-size: 14px;
+    font-size: 0.7em !important;
     color: #888;
     margin-left:5px;
 }
@@ -23,8 +23,8 @@ body{
     display: none;
 }
 .header{
-    font-weight:600;
-    font-size:10px;
+    font-size:1.2em !important;
+    color: #888 !important;
 }
 /*#chat-messages{
 	height: 200px;

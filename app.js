@@ -9,10 +9,11 @@ var handlebars = require('express-handlebars');
 var session    = require('express-session');
 var crypto 	   = require('crypto');
 var db         = require('./models/db.js');
+var helper     = require('./models/helper.js');
 var appRoute   = require('./routes/app.js');
 // var userRoute  = require('./routes/user.js');
 // var chatRoute  = require('./routes/chat.js');
-
+ 
 var sessionMiddleware = session({secret: "xpm#sfr", resave : true, saveUninitialized: false})
  
 var app        = express();
@@ -137,6 +138,13 @@ io.on("connection",function(socket){
             "receiver" : msgObj.receiver,
             "msg"      : senderName+' is typing...', 
         });
+        console.log(chalk.red("Typing event received from :"+msgObj.sender+" to :"+msgObj.receiver));
+        helper.getUsername("amit");
+        
+        var room = io.sockets.adapter.rooms;
+        for (var key in room){
+            console.log(room[key]);
+        }        
     });
 
 	// User disconencts

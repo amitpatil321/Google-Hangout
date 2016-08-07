@@ -45,6 +45,7 @@ $(document).ready(function(){
 
 	// Get 'user is typing..' message
 	socket.on("typing", function(dataObj){
+		console.log("typing event received"+dataObj.sender+" for "+dataObj.receiver);
 		var chatwin = $(document).find(".chatwindow[id='"+dataObj.sender+"'] .messages");
 		chatwin.find(".typing").html(dataObj.msg).fadeIn();
 		setTimeout(function(){ chatwin.find(".typing").hide(); }, 1000);
