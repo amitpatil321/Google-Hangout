@@ -57,7 +57,8 @@ io.on("connection",function(socket){
       // check if user already exists ?
       if(!user[socket.uid])
         users[socket.uid] = socket;
-      
+
+      // check if user already exists in online users list ?
       var found = 0;  
       for (var key in onlineusers) {
         console.log(onlineusers[key].id+"=="+user.id);
@@ -67,12 +68,6 @@ io.on("connection",function(socket){
 
       if(!found)
         onlineusers.push(user)
-	  else
-        console.log("found"+found);
-
-      console.log(onlineusers)
-      console.log("=====")
-      console.log(user.id)
 
       // Store user details in online users list
 	  io.emit("userOnline",{"users":onlineusers});
