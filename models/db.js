@@ -27,12 +27,21 @@ var userSchema = new mongoose.Schema({
 //mongoose.model( 'Users', userSchema );
 global.Users = mongoose.model('Users',userSchema);
 
-/*** users schema ***/
+
+/*** Rooms schema ***/
 var skeysSchema = new mongoose.Schema({
     uid       : {type:String},
     secretkey : {type:String},
     otherkey  : {type:String}
 });
 
-//mongoose.model( 'Keys', skeysSchema );
+global.Keys = mongoose.model('Keys',skeysSchema);
+
+/*** secret keys table schema ***/
+var skeysSchema = new mongoose.Schema({
+    uid       : {type:String},
+    secretkey : {type:String},
+    otherkey  : {type:String}
+});
+
 global.Keys = mongoose.model('Keys',skeysSchema);

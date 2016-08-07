@@ -91,8 +91,10 @@ io.on("connection",function(socket){
         // check if users are in room already ? 
         // If not then create new otherwise use same room
         if(!io.sockets.adapter.rooms[room]){
-         	users[msgObj.receiver].join(room);  
-        	users[msgObj.sender].join(room);
+         	users[receiver].join(room);  
+        	users[sender].join(room);
+            // Store entry in database
+            userModel.storeRoom(sender,receiver);
         }    
         // // Find sender name 
         // for (var key in onlineusers) {
