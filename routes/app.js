@@ -1,6 +1,6 @@
 var mongoose    = require( 'mongoose' );
-var users       = mongoose.model('Users');
 var crypto      = require('crypto');
+var users       = mongoose.model('Users');
 var helperModel = require('../models/helper.js');
 
 // Show home page
@@ -44,11 +44,8 @@ exports.loginCheck = function(req,res){
                 // onlineusers.push({"id": id, "name" : name})
 
                 // Store user details in session
-                var secretkey = crypto.randomBytes(20).toString('hex');
-                req.session.user = {"id": id,"secret": secretkey,"name" : name}
 
-                // Save user id and secret key in a database  
-                helperModel.insertKey(id, secretkey, secretkey);  
+                req.session.user = {"id": id,"secret": crypto.randomBytes(20).toString('hex'),"name" : name}
 
                 res.redirect("/home");
             }else{

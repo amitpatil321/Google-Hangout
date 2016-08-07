@@ -10,6 +10,7 @@ var session     = require('express-session');
 var crypto 	    = require('crypto');
 var db          = require('./models/db.js');
 var userModel   = require('./models/user.js');
+var roomsModel  = require('./models/rooms.js');
 var appRoute    = require('./routes/app.js');
 // var userRoute  = require('./routes/user.js');
 // var chatRoute  = require('./routes/chat.js');
@@ -47,7 +48,7 @@ io.use(function (socket, next){
     var name = socket.handshake.query.name;
     socket._name = name;
     next(); 
-});
+}); 
   
 var onlineusers = new Array();
 var users = new Array();
@@ -79,46 +80,59 @@ io.on("connection",function(socket){
     // New message event
 	socket.on("message", function(msgObj){
         // Get users secret keys
-        var senderSecret   = userModel.getSecret(msgObj.sender);
+        var senderSecret   = socket.request.session.user.secret;
+        console.log(senderSecret);
+        //var senderSecret   = userModel.getSecret(msgObj.sender);
 		var receiverSecret = userModel.getSecret(msgObj.receiver);
  
         var sender   = msgObj.sender 
         var receiver = msgObj.receiver
 
-        // Create room name
-        var room = senderSecret+"-"+receiverSecret;
+        //var randomstring = crypto.randomBytes(20).toString('hex')
+        //socket.request.session.secret = randomstring;
 
-        // check if users are in room already ? 
-        // If not then create new otherwise use same room
-        if(!io.sockets.adapter.rooms[room]){
-         	users[receiver].join(room);  
-        	users[sender].join(room);
-            // Store entry in database
-            userModel.storeRoom(sender,receiver);
-        }    
-        // // Find sender name 
-        // for (var key in onlineusers) {
-        //     if(onlineusers[key].id == sender)
-        //         senderName = onlineusers[key].name
-        // }      
-        // // Find receiver name 
-        // for (var key in onlineusers) {
-        //     if(onlineusers[key].name == receiver);
-        //         receiverName = onlineusers[key].name
-        // }      
-  
-    	// send message to all user in room
-    	io.sockets.in(room).emit("message",{
+        var room = senderSecret+"-"+receiver;
+
+        users[receiver].join(room);  
+        users[sender].join(room);             
+
+        io.sockets.in(room).emit("message",{
             "msg"          : msgObj.msg, 
             "sender"       : msgObj.sender, 
             "receiver"     : msgObj.receiver,
             "timestamp"    : Date.now() 
-    	});
-		// List all rooms and members	
-		// var room = io.sockets.adapter.rooms;
-		// for (var key in room){
-		//     console.log(room[key]);
-		// }
+        }); 
+
+        // Store entry in database
+        //roomsModel.getRoomId(sender,receiver,function(err, room){
+
+            // console.log("2");
+
+            // console.log("found room :"+room);
+
+            // if(!room.length){
+            //     console.log(chalk.red("Creating new room"));
+            //     // Create room name
+            //     room = roomsModel.createRoom(sender,receiver);
+            //     users[receiver].join(room);  
+            //     users[sender].join(room);             
+            // }else
+            //     console.log(chalk.yellow("Chatting in existing room "+room))
+
+            // io.sockets.in(room).emit("message",{
+            //     "msg"          : msgObj.msg, 
+            //     "sender"       : msgObj.sender, 
+            //     "receiver"     : msgObj.receiver,
+            //     "timestamp"    : Date.now() 
+            // });                      
+            
+            // //List all rooms and members   
+            // var rroom = io.sockets.adapter.rooms;
+            // for (var key in rroom){
+            //     console.log(rroom[key]);
+            // }
+        //});
+        //console.log("3");
 	});
 
     socket.on("typing", function(msgObj){
@@ -128,10 +142,9 @@ io.on("connection",function(socket){
         var senderName   = '';
 
         var room = senderSecret+"-"+receiverId;
-
         // Find sender name 
         for (var key in onlineusers) {
-            if(onlineusers[key].name == msgObj.sender);
+            if(onlineusers[key].id == msgObj.sender)
                 senderName = onlineusers[key].name
         }   
         // Create room name
@@ -159,6 +172,5 @@ io.on("connection",function(socket){
 // Listen server request on given port
 var port = process.env.PORT || 3000;
 httpServer.listen(app.get('port'), function () {
-  console.log('Web server listening on port ' + app.get('port'))
-  console.log('Web server started at : ' + new Date().toString("hh:mm tt"))
+  console.log('Web server listening on port ' + app.get('port')+" at "+ new Date().toString("hh:mm tt"))
 });

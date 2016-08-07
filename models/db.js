@@ -29,13 +29,14 @@ global.Users = mongoose.model('Users',userSchema);
 
 
 /*** Rooms schema ***/
-var skeysSchema = new mongoose.Schema({
-    uid       : {type:String},
-    secretkey : {type:String},
-    otherkey  : {type:String}
+var roomsSchema = new mongoose.Schema({
+    startedby   : {type : String},
+    startedwith : {type : String},
+    roomname    : {type : String},
+    timestamp   : {type : Date, default : Date.now}
 });
 
-global.Keys = mongoose.model('Keys',skeysSchema);
+global.Rooms = mongoose.model('rooms',roomsSchema);
 
 /*** secret keys table schema ***/
 var skeysSchema = new mongoose.Schema({

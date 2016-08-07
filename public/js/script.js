@@ -12,7 +12,7 @@ $(document).ready(function(){
     		$div.attr('class', 'ui card chatwindow comments');
     		$div.attr('id', userid);
     		$div.attr('style', 'position:absolute;left:'+randomx()+"px;top:"+randomy()+"px;");
-    		$div.html('<div class="content drag uwheader"><div class="header">'+username+'<i class="icon right floated minibtn disabled remove"></i><i class="icon right floated minibtn disabled chevron up"></i></div></div><div class="content messages" id="chat-messages"><div class="typing">Shrikant is typing...</div></div><div class="extra content"><div class="ui large transparent right icon ui fluid input"><i class="comment outline icon"></i><input class="txtmsg" id="'+userid+'" value="" placeholder="Message..." type="text"></div>');
+    		$div.html('<div class="content drag uwheader"><div class="header">'+username+'<i class="icon right floated minibtn disabled remove"></i><i class="icon right floated minibtn disabled chevron up"></i></div></div><div class="content messages" id="chat-messages"><div class="typing">Shrikant is typing...</div></div><div class="extra content"><div class="ui large transparent right icon ui fluid input"><i class="comment outline icon"></i><input class="txtmsg" id="'+userid+'" value="" placeholder="Message..." type="text" autofocus></div>');
       }  
       // <span class="ui right floated minibtn close">x</span><span class="ui right floated minibtn">-</span>
 
