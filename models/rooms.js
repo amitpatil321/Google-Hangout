@@ -6,7 +6,7 @@ module.exports = {
 
     deleteall : function(){
         Rooms.remove(function(err,removed){
-            console.log("All records removed"+removed);
+            //console.log("All records removed"+removed);
         });
     },
  
@@ -19,7 +19,7 @@ module.exports = {
                 //console.log("inside sdoc.length");
                 Rooms.find({startedby : startedwith, startedwith : startedby}, function(err, rdoc){
                     if(rdoc.length){    
-                        console.log('Room found level 2 '+rdoc[0].roomname); 
+                        //console.log('Room found level 2 '+rdoc[0].roomname); 
                         //return rdoc[0].roomname
                         next(null,rdoc[0].roomname)
                     }else
@@ -46,7 +46,7 @@ module.exports = {
                 throw err;
                 console.log(err); 
             }else{
-                console.log('Room created : '+roomname);
+                //console.log('Room created : '+roomname);
                 callback(roomname);
             }
         });         

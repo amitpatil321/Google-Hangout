@@ -77,6 +77,8 @@ io.on("connection",function(socket){
       if(!found)
         onlineusers.push(user)
 
+      //console.log(users);
+      //console.log(onlineusers);
       // Store user details in online users list
 	  io.emit("userOnline",{"users":onlineusers});
 
@@ -139,55 +141,28 @@ io.on("connection",function(socket){
             //   var client_socket = io.sockets.connected[clientId];//Do whatever you want with this
             // }
          
-        });
+        }); 
         //console.log("3");
 	});
        
-    socket.on("typing", function(msgObj){
+  socket.on("typing", function(msgObj){
+      var sender   = msgObj.sender 
+      var receiver = msgObj.receiver
 
-        var sender   = msgObj.sender 
-        var receiver = msgObj.receiver
+      roomsModel.getRoomId(sender,receiver,function(err, room){
+        chatModel.sendTyping(room,io,msgObj);
+      });  
+  });
 
-        roomsModel.getRoomId(sender,receiver,function(err, room){
-          chatModel.sendTyping(room,io,msgObj);
-        });  
-
-        // userModel.getSecretKey(socket, function(senderSecret){
-        //     //var senderSecret = socket.request.session.user.secret;
-        //     // Get receivers id
-        //     var receiverId   = msgObj.receiver;
-        //     var senderName   = '';
-
-        //     //var room = senderSecret+"-"+receiverId;
-        //     var room = "aaaa";
-        //     // Find sender name 
-        //     for (var key in onlineusers) {
-        //         if(onlineusers[key].id == msgObj.sender)
-        //             senderName = onlineusers[key].name
-        //     }   
-        //     // Create room name
-        //     //room = senderSecret+"-"+receiverId;
-        //     io.sockets.in(room).emit("typing",{
-        //         "sender"   : msgObj.sender,
-        //         "receiver" : msgObj.receiver,
-        //         "msg"      : senderName+' is typing...', 
-        //     }); 
-        // });            
-        //console.log(chalk.red("Typing event received from :"+msgObj.sender+" to :"+msgObj.receiver));
-        
-        // var room = io.sockets.adapter.rooms;
-        // for (var key in room){
-        //     console.log(room[key]);
-        // }
-
-    });
-
-	// User disconnects
-	socket.on('disconnect', function () {
-	  socket.emit('disconnected');
-	});
+  // User disconnects
+  socket.on('disconnect', function () {
+    // remove user from users array
+    console.log("Disconnecting...");
+    userModel.remove(socket);
+  });
 
 });
+
 
 // Listen server request on given port
 var port = process.env.PORT || 3000;

@@ -1,4 +1,5 @@
 $(document).ready(function(){
+
 	// Set window title
 	document.title += " - "+myname;
 	// Send user online event to server
@@ -23,7 +24,7 @@ $(document).ready(function(){
 		var sender    =  msgObj.sender;
 		var receiver  =  msgObj.receiver;
 		var timestamp =  msgObj.timestamp;
-		var msg 	  =  msgObj.msg;
+		var msg 	  =  msgObj.msg; 
 
 		// Check if i am a receiver and chat window is not open, then open window and append message
 		if(receiver == myid){ 
@@ -40,7 +41,7 @@ $(document).ready(function(){
 			// I am sender that means window already open, so just append the message to existing message list 
 			$(document).find(".chatwindow[id='"+receiver+"'] .messages").append(tplmsg(msgObj,"self"));
 		}
-		scroll();
+		scroll(); 
 	});
 
 	// Get 'user is typing..' message

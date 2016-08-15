@@ -2,6 +2,23 @@ var db = require("./db.js");
 
 module.exports = {
 
+    remove : function(socket){
+        // var index = 0;
+        // for (var key in users) {
+        //   if (users.hasOwnProperty(key)) {
+        //     if(key == socket.uid)
+        //       users[index] = null;  
+        //   }
+        //   index++;
+        // }
+        // console.log(users);    
+
+        delete users[socket.uid]
+        //users[socket.uid] = null;
+        //users.splice(users[socket.uid], 1);
+        console.log(users);
+    },
+
     getName : function(sender){
         //console.log(onlineusers);
         for (var key in onlineusers) {
