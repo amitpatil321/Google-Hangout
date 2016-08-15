@@ -3,16 +3,22 @@ $(document).ready(function(){
 	// Set window title
 	document.title += " - "+myname;
 	// Send user online event to server
-	socket.emit("userOnline",{id:myid,name:myname});
+	socket.emit("userOnline",{id:myid,name:myname,pic:pic});
 
 	// Get list on all online users
 	socket.on("userOnline",function(obj){
 		var list = '';
+		console.log(obj.users);
 		for (var key in obj.users) {
 		  if (obj.users.hasOwnProperty(key)) {
 		  	// Dont list logged in user(sender) in list
-		  	if(obj.users[key].id != myid)
-		  		list += '<a class="item user" id="'+obj.users[key].id+'">'+obj.users[key].name+'</a>';
+		  	if(obj.users[key].id != myid){
+		  		name = obj.users[key].name
+		  		pic  = obj.users[key].pic
+
+		  		//list += '<a class="item user" id="'+obj.users[key].id+'"><img src="https://randomuser.me/api/portraits/men/'+pic+'.jpg">'+name+'</a>';
+		  		list += '<a class="item user" id="'+obj.users[key].id+'"><img class="ui avatar image" src="https://randomuser.me/api/portraits/men/'+pic+'.jpg">'+name+'</a>';
+		  	}
 		  }
 		}
 		// Upate online users list
@@ -56,9 +62,12 @@ $(document).ready(function(){
 function tplmsg(msgObj,msgsender){
 	//return '<div class="comment"><div class="content"><a class="author">'+msgObj.sendername+'</a><div class="metadata"><span class="date">Today at 5:42PM</span></div><div class="text">'+msgObj.msg+'</div></div></div>';
 	var msgalign = "left";
-	if(msgObj.sender == myid) msgalign = "right";
+	if(msgObj.sender == myid) { 
+		msgalign = "right";
+		ppic = "https://randomuser.me/api/portraits/men/"+pic+".jpg";
+	}else ppic = 'https://randomuser.me/api/portraits/men/1.jpg' 
 
-	return '<div class="message '+msgalign+'"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/1_copy.jpg"><div class="bubble">'+msgObj.msg+'<div class="corner"></div><span class="msgtime">'+moment(msgObj.timestamp).format("h:mm:ss A")+'</span></div></div>';
+	return '<div class="message '+msgalign+'"><img src="'+ppic+'"><div class="bubble">'+msgObj.msg+'<div class="corner"></div><span class="msgtime">'+moment(msgObj.timestamp).format("h:mm:ss A")+'</span></div></div>';
 }
 
 function scroll(){

@@ -70,6 +70,13 @@ $(document).ready(function(){
         }
       }
     });
+
+    // Profile pics
+    var pics = '';
+    for(var i =10; i<=20; i++){
+        pics += '<div class="item" data-value="'+i+'"><img class="ui avatar image" src="https://randomuser.me/api/portraits/men/'+i+'.jpg"></div>';
+    }
+    $(".menu").append(pics);    
 });
 
 // Get random number relative to document width 

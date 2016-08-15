@@ -20,13 +20,14 @@ mongoose.connection.on("connected",function(){
 
 /*** users schema ***/
 var userSchema = new mongoose.Schema({
-    name     : {type:String},
-    username : {type : String, unique : true},
-    password : {type : String}
+    name      : {type : String},
+    username  : {type : String, unique : true},
+    password  : {type : String},
+    profilepic: {type : String}
 });
 
 //mongoose.model( 'Users', userSchema );
-global.Users = mongoose.model('Users',userSchema);
+global.Users = mongoose.model('users',userSchema);
 
 
 /*** Rooms schema ***/
@@ -46,4 +47,4 @@ var skeysSchema = new mongoose.Schema({
     otherkey  : {type:String}
 });
 
-global.Keys = mongoose.model('Keys',skeysSchema);
+global.Keys = mongoose.model('keys',skeysSchema);

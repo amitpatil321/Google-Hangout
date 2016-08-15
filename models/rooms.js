@@ -1,5 +1,5 @@
 var db = require("./db.js");
-var crypto      = require('crypto');
+var crypto = require('crypto');
 
 
 module.exports = {

@@ -1,6 +1,6 @@
 // Development only libs
 var chalk      = require('chalk');
-// Deployment libs
+// Deployment libs 
 var express     = require('express');
 var http        = require('http');
 var socket      = require('socket.io');
@@ -8,6 +8,8 @@ var bodyparser  = require('body-parser');
 var handlebars  = require('express-handlebars');
 var session     = require('express-session');
 var crypto      = require('crypto');
+var helpers     = require('handlebars-helpers')();
+ 
 var db          = require('./models/db.js');
 var userModel   = require('./models/user.js');
 var roomsModel  = require('./models/rooms.js');
@@ -31,7 +33,7 @@ io.use(function(socket, next){
 app.set('port', process.env.PORT || 3000)
 app.set('view engine','handlebars');
 app.engine('handlebars',handlebars({defaultLayout:'layout'}));
-
+//app.engine('handlebars',hbs({defaultLayout:'layout'}));
 
 // Middlewares
 app.use(express.static(__dirname+"/public"));
@@ -42,6 +44,7 @@ app.use(sessionMiddleware);
 // Handle paths/routes
 app.get('/', appRoute.home)
 app.get('/login', appRoute.login)
+app.post('/register', appRoute.register)
 app.get('/login/:username/:password', appRoute.login2)
 app.post('/login', appRoute.loginCheck)
 app.get('/home', appRoute.home)
@@ -57,7 +60,7 @@ users       = new Array();
 
 // Clear all stored rooms
 roomsModel.deleteall()
-
+ 
 io.on("connection",function(socket){
 	// User comes online 
 	socket.on("userOnline", function(user){
@@ -159,6 +162,7 @@ io.on("connection",function(socket){
     // remove user from users array
     console.log("Disconnecting...");
     userModel.remove(socket);
+    io.emit("userOnline",{"users":onlineusers});
   });
 
 });

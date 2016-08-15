@@ -1,6 +1,5 @@
 var mongoose    = require('mongoose');
-//var crypto      = require('crypto');
-var users       = mongoose.model('Users');
+var userModel   = require('../models/user.js');
 var helperModel = require('../models/helper.js');
 
 // Show home page
@@ -25,35 +24,13 @@ exports.login2 = function(req,res){
     delete req.session.flash
 }
 
+exports.register = function(req, res){
+    userModel.register(req)
+    res.render("login.handlebars",{"msg" : req.session.flash});
+}
+
 // check user login details
 exports.loginCheck = function(req,res){
-    var username = req.body.username;
-    var password = req.body.password;    
-    users.find({username: username}, function(er, user){
-        //console.log(user);
-        if(!user.length){
-            req.session.flash = {"type" : "error", "msg" : "Invalid username or password"}
-            res.redirect("/login");
-        }
-        else{
-            if(user[0].password == password){
-                var id   = user[0]._id
-                var name = user[0].name
-
-                // Store user details in online users list
-                // onlineusers.push({"id": id, "name" : name})
-
-                // Store user details in session
-
-                //req.session.user = {"id": id,"secret": crypto.randomBytes(20).toString('hex'),"name" : name}
-                req.session.user = {"id": id,"name" : name}
-                //console.log(req.session.user);
-                res.redirect("/home");
-            }else{
-                req.session.flash = {"type" : "error", "msg" : "Invalid username or password"}
-                res.redirect("/login");
-            }
-        }
-    });
+    userModel.login(req,res)
 }
 
