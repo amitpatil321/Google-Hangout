@@ -57,9 +57,9 @@ function tplmsg(msgObj,msgsender){
 	var msgalign = "left";
 	if(msgObj.sender == myid) msgalign = "right";
 
-	return '<div class="message '+msgalign+'"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/1_copy.jpg"><div class="bubble">'+msgObj.msg+'<div class="corner"></div><span>'+moment(msgObj.timestamp).format("h:mm:ss A")+'</span></div></div>';
+	return '<div class="message '+msgalign+'"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/1_copy.jpg"><div class="bubble">'+msgObj.msg+'<div class="corner"></div><span class="msgtime">'+moment(msgObj.timestamp).format("h:mm:ss A")+'</span></div></div>';
 }
 
 function scroll(){
-	$("#chat-messages").scrollTop(1000);
+	$(".messages").scrollTop(1000);
 }

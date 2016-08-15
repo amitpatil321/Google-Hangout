@@ -26,7 +26,9 @@ $(document).ready(function(){
 
     // Close chat winow
     $(document).on("click",".remove",function(){
-      $(this).closest(".chatwindow").remove();
+      $(this).closest(".chatwindow").fadeOut(function(){
+        $(this).remove();
+      });
     });     
 
     // Close chat winow
@@ -36,8 +38,8 @@ $(document).ready(function(){
         $(this).removeClass("chevron up").addClass('chevron down'); 
       else
         $(this).removeClass("chevron down").addClass('chevron up'); 
-      self.closest(".chatwindow").find(".messages").slideToggle("fast",function(){
-        self.closest('.chatwindow').find(".extra").slideToggle('fast');
+      self.closest(".chatwindow").find(".messages,.extra").fadeToggle("fast",function(){
+        //self.closest('.chatwindow').find(".extra").slideToggle('fast');
       });
    		//$(this).closest(".extra").slideUp();
    	}); 
