@@ -50,7 +50,8 @@ $(document).ready(function(){
    			var receiver = $(this).attr("id");
    			var msg  	 = $(this).val();
         if(msg.length){
-     			socket.emit("message",{sender: myid, receiver: receiver, msg: msg});
+          $(document).find(".chatwindow[id='"+receiver+"'] .messages").append(tplmsg({sender: myid, receiver: receiver, msg: msg},"self"));
+          socket.emit("message",{sender: myid, receiver: receiver, msg: msg});
      			// Clear text box
      			$(this).val('');
         }
@@ -76,7 +77,7 @@ $(document).ready(function(){
     for(var i =10; i<=20; i++){
         pics += '<div class="item" data-value="'+i+'"><img class="ui avatar image" src="https://randomuser.me/api/portraits/men/'+i+'.jpg"></div>';
     }
-    $(".menu").append(pics);    
+    $(".ppic").append(pics);    
 });
 
 // Get random number relative to document width 

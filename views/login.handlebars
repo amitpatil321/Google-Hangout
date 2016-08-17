@@ -5,7 +5,7 @@
         {{#compare msg.mod '==' "login"}}
         <div class="ui message visible {{msg.type}}">{{msg.msg}}</div>
         {{/compare}}
-        <form class="ui form" method="post" action="/login">
+        <form class="ui form loginform" method="post" action="/login">
           <div class="field">
             <label>Username</label>
             {{#if username}}
@@ -22,8 +22,10 @@
             <input name="password" placeholder="Password" type="password" value="amit">
             {{/if}}
           </div>
+          <input type="hidden" name="action" value="login">
           <button class="ui button green" type="submit">Login</button><br>
           <p>Not  a member? <a href="/register">Register</a> now</p>
+          <input type="button" onclick="window.location='http://localhost:3000/login/p/p'" value="Refresh">
         </form>
       </div>
     </div>
@@ -33,9 +35,11 @@
     <div class="column">
       <h3>Register</h3>
       {{#compare msg.mod '==' "register"}}
-      <div class="ui message visible {{msg.type}}">{{msg.msg}}</div>
+      <div class="ui message visible {{msg.type}}">
+        {{{msg.msg}}}       
+      </div>
       {{/compare}}      
-      <form class="ui form" method="post" action="/register">
+      <form class="ui form" method="post" action="/login">
         <div class="field">
           <label>Display Name</label>
           <input name="name" placeholder="Display Name" type="text" autocomplete="off" value="">
@@ -57,18 +61,20 @@
                 <img class="ui avatar image" src="https://randomuser.me/api/portraits/men/1.jpg">
               </div>
               <i class="dropdown icon"></i>
-              <div class="menu">
+              <div class="menu ppic">
  
               </div>
             </div>          
         </div>
+        <input type="hidden" name="action" value="register">
         <button class="ui button teal" type="submit">Register</button><br>
       </form>
     </div>
   </div> 
+
 <script>
   $().ready(function(){
-     //$(".form").submit();
+    $(".loginform").submit();
     $('.dropdown').dropdown();     
   })
 </script>

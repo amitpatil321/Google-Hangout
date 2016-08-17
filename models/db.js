@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var chalk    = require('chalk');
-
+ 
 mongoose.Promise = global.Promise;
 // mongodb://amit:amit@ds145325.mlab.com:45325/hangout
 var dbURI = 'mongodb://127.0.0.1/hangout';
@@ -20,13 +20,12 @@ mongoose.connection.on("connected",function(){
 
 /*** users schema ***/
 var userSchema = new mongoose.Schema({
-    name      : {type : String},
-    username  : {type : String, unique : true},
-    password  : {type : String},
-    profilepic: {type : String}
+    name      : {type : String, required : true},
+    username  : {type : String, unique : true, required : true},
+    password  : {type : String, required : true},
+    profilepic: {type : String, required : true}
 });
 
-//mongoose.model( 'Users', userSchema );
 global.Users = mongoose.model('users',userSchema);
 
 
@@ -42,9 +41,9 @@ global.Rooms = mongoose.model('rooms',roomsSchema);
 
 /*** secret keys table schema ***/
 var skeysSchema = new mongoose.Schema({
-    uid       : {type:String},
-    secretkey : {type:String},
-    otherkey  : {type:String}
+    uid       : {type : String},
+    secretkey : {type : String},
+    otherkey  : {type : String}
 });
 
 global.Keys = mongoose.model('keys',skeysSchema);

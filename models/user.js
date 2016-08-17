@@ -1,20 +1,36 @@
 var db = require("./db.js");
-
-module.exports = {
  
-    register : function(req,socket){
+module.exports = {
+
+    register : function(req,res){
         var user        = new Users();
+        var errlist     = "";
+
         user.name       = req.body.name
         user.username   = req.body.username
         user.password   = req.body.password
         user.profilepic = req.body.profilepic
         user.save(function(err, user_saved){
+            //console.log(err);
             if(err){
-                req.session.flash = {type : "error", msg : "Unexpected error!", mod : "register"};
+                if(err.name == 'ValidationError'){
+                    for (var key in err.errors) {
+                        if (err.errors.hasOwnProperty(key)) {
+                            errlist += '- '+key+' is required<br>';
+                        }
+                    }
+                    req.session.flash = {type : "error", msg : errlist, mod : "register"};
+                }                
+                else if (err.name == 'MongoError' && err.code == 11000) {
+                    req.session.flash = {type : "error", msg : "Username already exists", mod : "register"}
+                }else{
+                    req.session.flash = {type : "error", msg : "Something went wrong, Try again", mod : "register"};
+                }
             }else{
-                console.log("saved");
+                console.log("saved"+user_saved);
                 req.session.flash = {type : "success", msg : "Registration Successful", mod : "register"};
             }
+            res.redirect("/login");
         });
     },
 
