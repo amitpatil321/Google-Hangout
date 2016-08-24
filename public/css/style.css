@@ -45,6 +45,10 @@ body{
 	overflow: auto;
 }*/
 
+.red{
+    color : #a94442;
+}
+
 #chat-messages{
     opacity:1;
     width  :290px;
@@ -78,15 +82,16 @@ body{
 }
 #chat-messages div.message.right{
       padding: 0 58px 30px 0;
-      margin-right: -19px;
+      margin-right: -35px;
       margin-left: 19px;
 }
 #chat-messages .message img{
       float: left;
       margin-left: -38px;
       border-radius: 50%;
-      width: 30px;
-      margin-top: 5px;
+      width : 25px;
+      height: 25px;
+      /*margin-top: 5px;*/
 }
 #chat-messages div.message.right img{
     float: right;   

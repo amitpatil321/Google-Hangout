@@ -47,3 +47,13 @@ var skeysSchema = new mongoose.Schema({
 });
 
 global.Keys = mongoose.model('keys',skeysSchema);
+
+/*** Chat table schema ***/
+var chatScema = new mongoose.Schema({
+    sender    : {type : String,required : true},
+    receiver  : {type : String,required : true},
+    message   : {type : String,required : true},
+    timestamp : {type : String, require : true}
+});
+
+global.Chats = mongoose.model('chats',chatScema);

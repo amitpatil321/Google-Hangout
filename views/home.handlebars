@@ -1,7 +1,9 @@
 
 <div class="ui card useslist">
   <div class="content">
-    <div class="header teal ui">Hangout - {{user.name}}</div>
+    <div class="header teal ui">Hangout - {{user.name}}
+        <span><a href="javascript:;" class="right floated logout">Logout<i class="icon Sign Out"></i></a></span>
+    </div>
   </div>
 
   <div class="content">
@@ -12,13 +14,13 @@
 </div>
 
 Todo : <ul>
-    <li>Handle disconnect event</li>
+    <li>Handle user logout </li>
     <li>Random user images</li>
     <li>Set message time</li>
     <li>Update message timings live like (3 mins ago)</li>
     <li>Add window minimize feature - Done</li>
-    <li>Check if user already exists ?</li>
-    <li>Handle page refresh -  on page refresh user gets initialized again</li>
+    <li>Check if user already exists ? - Done</li>
+    <li>Handle page refresh - Quite complicated with this structure</li>
 </ul>
 
 {{! 

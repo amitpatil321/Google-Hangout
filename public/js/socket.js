@@ -1,5 +1,4 @@
 $(document).ready(function(){
-
 	// Set window title
 	document.title += " - "+myname;
 	// Send user online event to server
@@ -16,7 +15,7 @@ $(document).ready(function(){
 		  	if(obj.users[key].id != myid){
 		  		name = obj.users[key].name
 		  		pic  = obj.users[key].pic
-
+ 
 		  		//list += '<a class="item user" id="'+obj.users[key].id+'"><img src="https://randomuser.me/api/portraits/men/'+pic+'.jpg">'+name+'</a>';
 		  		//list += '<a class="item user" id="'+obj.users[key].id+'"><img class="ui avatar image" src="https://randomuser.me/api/portraits/men/'+pic+'.jpg">'+name+'</a>';
 		  		list += '<a class="item user" id="'+obj.users[key].id+'"><img class="ui avatar image" src="/'+pic+'.png">'+name+'</a>';
@@ -50,57 +49,58 @@ $(document).ready(function(){
 			//$(document).find(".chatwindow[id='"+receiver+"'] .messages").append(tplmsg(msgObj,"self"));
 		}
 		scroll(); 
-	}); 
+	});
  
 	// Get 'user is typing..' message
 	socket.on("typing", function(dataObj){
-		console.log("typing event received"+dataObj.sender+" for "+dataObj.receiver);
+		//console.log("typing event received"+dataObj.sender+" for "+dataObj.receiver);
 		var chatwin = $(document).find(".chatwindow[id='"+dataObj.sender+"'] .messages");
 		chatwin.find(".typing").html(dataObj.msg).fadeIn();
 		setTimeout(function(){ chatwin.find(".typing").hide(); }, 1000);
 	});
+
+	// Handle user logout
+	socket.on("logout",function(user){
+		tplmsglogout(user.name);
+		if(myname == user)
+			window.location.reload();
+	});
 }) 
- 
+
+// Message template 
 function tplmsg(msgObj,msgsender){
-	//return '<div class="comment"><div class="content"><a class="author">'+msgObj.sendername+'</a><div class="metadata"><span class="date">Today at 5:42PM</span></div><div class="text">'+msgObj.msg+'</div></div></div>';
 	var msgalign = "left";
-	//console.log(msgsender);
-	if(msgObj.sender == myid) { 
+
+	if(msgsender == "self"){
 		msgalign = "right";
-		//ppic = "https://randomuser.me/api/portraits/men/"+pic+".jpg";
-		ppic = "/"+pic+".png";
-	}else {
-		ppic = getPic(msgObj,msgObj.receiver);
-		//ppic = 'https://randomuser.me/api/portraits/men/1.jpg' 
+		ppic = "/"+mypic+".png";
 	}
-
-	// if(msgsender == "self"){
-	// 	msgalign = "right";
-	// 	ppic = "/"+mypic+".png";
-	// }
-	// else{
-	// 	alert("receiver got message");
-	// 	ppic = getPic(msgObj,msgObj.receiver);
-	// }
-
-	//ppic = getPic(msgObj,msgObj.receiver);
-
+	else{
+		ppic = getPic(msgObj,msgObj.sender);
+	}
 	return '<div class="message '+msgalign+'"><img src="'+ppic+'"><div class="bubble">'+msgObj.msg+'<div class="corner"></div><span class="msgtime">'+moment(msgObj.timestamp).format("h:mm:ss A")+'</span></div></div>';
 }
 
+// Logout action teplate
+tplmsglogout = function (user) {
+	// User should get notification only if he's not the one who logged out
+	if (user != myname) {
+		var chatwin = $(document).find(".chatwindow .messages");
+		chatwin.find(".typing").html(user+" is logged out and cannot see your message").addClass("red").fadeIn();
+	}
+}
+
+// Scroll to bottom everytime new message gets append
 function scroll(){
 	$(".messages").scrollTop(1000);
 }
 
+// Get users profile pic
 function getPic(msgObj,user){
-	//alert("Receiver :"+user);
 	var ousers =  window.onlineusers
-	//console.log(ousers);
 	for (var key in ousers) {
 	  if (ousers.hasOwnProperty(key)) {
 	  	if(ousers[key].id == user){
-	  		//alert("/"+ousers[key].pic+".png");
-	  		//ppic = "https://randomuser.me/api/portraits/men/"+ousers[key].pic+".jpg";
 	  		return "/"+ousers[key].pic+".png";
 	  	}
 	  }

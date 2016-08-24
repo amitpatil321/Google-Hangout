@@ -7,7 +7,6 @@ var socket      = require('socket.io');
 var bodyparser  = require('body-parser');
 var handlebars  = require('express-handlebars');
 var session     = require('express-session');
-var crypto      = require('crypto');
 var helpers     = require('handlebars-helpers')();
  
 var db          = require('./models/db.js');
@@ -56,7 +55,7 @@ io.use(function (socket, next){
 }); 
    
 onlineusers = new Array();
-users       = new Array();
+users = new Array();
 
 // Clear all stored rooms
 roomsModel.deleteall()
@@ -66,18 +65,18 @@ io.on("connection",function(socket){
 	socket.on("userOnline", function(user){
       socket.uid = user.id;
       // check if user already exists ?
-      if(!user[socket.uid])
+      if (!user[socket.uid])
         users[socket.uid] = socket;
 
       // check if user already exists in online users list ?
-      var found = 0;  
+      var found = 0;
       for (var key in onlineusers) {
         //console.log(onlineusers[key].id+"=="+user.id);
         if(onlineusers[key].id == user.id)
             found = 1 
-      }         
+      }   
 
-      if(!found)
+      if (!found)
         onlineusers.push(user)
 
       //console.log(users);
@@ -90,62 +89,26 @@ io.on("connection",function(socket){
     // New message event
 	socket.on("message", function(msgObj){
 
-        var sender   = msgObj.sender 
-        var receiver = msgObj.receiver
+    var sender = msgObj.sender
+    var receiver = msgObj.receiver
 
-        //Store entry in database
-        roomsModel.getRoomId(sender,receiver,function(err, room){
-            //console.log(sender+"=="+receiver+"=="+room);
-            //var room = null
-            if(room==null && io.sockets.adapter.rooms[room] == undefined){
-                //console.log("Creating new room");
-                roomsModel.createRoom(sender,receiver,function(room){
-                    //console.log("inside 1");
-                    users[receiver].join(room);  
-                    users[sender].join(room);
-                    chatModel.sendMessage(room,io,msgObj);
-                });                    
-            }else{
-              //console.log("Chatting in existing room");
-              chatModel.sendMessage(room,io,msgObj);
-            }
-
-            //console.log(typeof(room)+"=="+room);
- 
-            // //console.log("2");
-            // var room = "1234";
-            // if(!room.length){
-            //     console.log(chalk.red("Creating new room"));
-            //     // Create room name
-            //     room = roomsModel.createRoom(sender,receiver);
-            //     users[receiver].join(room);  
-            //     users[sender].join(room);             
-            // }else
-            //     console.log(chalk.yellow("Chatting in existing room "+room))
-
-            // io.sockets.in(room).emit("message",{
-            //     "msg"          : msgObj.msg, 
-            //     "sender"       : msgObj.sender, 
-            //     "receiver"     : msgObj.receiver,
-            //     "timestamp"    : Date.now() 
-            // });                      
-            
-            // var defaultNsps = '/';
-            //console.log(io.of(defaultNsps).adapter.rooms);
-            //console.log(io.nsps[defaultNsps].adapter.rooms);
-
-            //console.log(io.sockets.in(room));
-
-
-            // var clients_in_the_room = io.sockets.adapter.rooms; 
-            // console.log(clients_in_the_room);
-            // for (var clientId in clients_in_the_room ) {
-            //   console.log('client: %s', clientId); //Seeing is believing 
-            //   var client_socket = io.sockets.connected[clientId];//Do whatever you want with this
-            // }
-         
-        }); 
-        //console.log("3");
+    //Store entry in database
+    roomsModel.getRoomId(sender, receiver, function (err, room) {
+      //console.log(sender+"=="+receiver+"=="+room);
+      //var room = null
+      if (room == null && io.sockets.adapter.rooms[room] == undefined) {
+        //console.log("Creating new room");
+        roomsModel.createRoom(sender, receiver, function (room) {
+          //console.log("inside 1");
+          users[receiver].join(room);
+          users[sender].join(room);
+          chatModel.sendMessage(room, io, msgObj);
+        });
+      } else {
+        //console.log("Chatting in existing room");
+        chatModel.sendMessage(room, io, msgObj);
+      }
+    });
 	});
        
   socket.on("typing", function(msgObj){
@@ -157,19 +120,31 @@ io.on("connection",function(socket){
       });  
   });
 
-  // User disconnects
-  socket.on('disconnect', function () {
-    // remove user from users array
-    console.log("Disconnecting...");
-    userModel.remove(socket);
-    io.emit("userOnline",{"users":onlineusers});
-  });
+  socket.on("logout", function (myid) {
+    var myname = userModel.getName(myid.id);
+    socket.request.session.destroy(function () {
+      roomsModel.getAllRoomIds(myid, function (err, rooms) {
+        for (var key in rooms) {
+          //console.log(rooms[key].roomname)
+          chatModel.sendLogout(rooms[key].roomname,io,myname)
+        }
+      });
+      //socket.emit("logout", { name: myname });
+      userModel.remove(socket);
+      io.emit("userOnline", { "users": onlineusers });
+    });
+  }); 
+
+  //  socket.on('disconnect', function () {
+  //       setTimeout(function () {
+  //         console.log("User disconected ");
+  //       }, 2000);
+  //   });
 
 });
-
 
 // Listen server request on given port
 var port = process.env.PORT || 3000;
 httpServer.listen(app.get('port'), function () {
-  console.log('Web server listening on port ' + app.get('port')+" at "+ new Date().toString("hh:mm tt"))
+  console.log('Web server listening on port ' + app.get('port') + " at " + new Date().toString("hh:mm tt"))
 });

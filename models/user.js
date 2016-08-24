@@ -77,11 +77,13 @@ module.exports = {
             }
             index++            
         }
-    },
-
+    }, 
+ 
     getName : function(sender){
         //console.log(onlineusers);
+        var senderName = false;
         for (var key in onlineusers) {
+            //console.log(onlineusers[key].id+"=="+sender);
             if(onlineusers[key].id == sender)
                 senderName = onlineusers[key].name
         }

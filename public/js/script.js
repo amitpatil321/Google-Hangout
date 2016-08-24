@@ -72,6 +72,9 @@ $(document).ready(function(){
       }
     });
 
+    $(document).on("click",".logout",function(){
+      socket.emit("logout",{id:myid});
+    });
     // Profile pics
     var pics = '';
     for(var i =10; i<=20; i++){
